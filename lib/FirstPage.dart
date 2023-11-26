@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:coffeeshop/HomePage.dart';
 
 class FirstPage extends StatefulWidget {
   FirstPage({Key? key}) : super(key: key);
@@ -33,7 +33,16 @@ class _FirstPageState extends State<FirstPage> {
             ElevatedButton(
               onPressed: () {
                 // Navigate to the HomePage without the transition animation
-
+                Navigator.pushReplacement(
+                  context,
+                  PageRouteBuilder(
+                    pageBuilder: (context, animation, secondaryAnimation) => HomePage(),
+                    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                      return child;
+                    },
+                    maintainState: false, // Set this to false to avoid maintaining state
+                  ),
+                );
               },
               style: ElevatedButton.styleFrom(
                 minimumSize: Size(400, 75),

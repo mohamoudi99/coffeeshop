@@ -1,9 +1,8 @@
-import 'package:flutter/material.dart';
 import 'package:coffeeshop/HomePage.dart';
+import 'package:flutter/material.dart';
 
-class Info extends StatelessWidget {
-  Info({Key? key}) : super(key: key);
-
+class Shop_page extends StatelessWidget {
+  String name = 'shop page';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,7 +26,7 @@ class Info extends StatelessWidget {
 
         ),
         backgroundColor: Colors.white70,
-        title: Text('Info'), // Set the title to 'Info' or any relevant text
+        title: Text('Shopping Page'), // Set the title to 'Info' or any relevant text
         foregroundColor: Colors.black,
       ),
       body: Center(
