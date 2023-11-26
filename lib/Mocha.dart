@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:coffeeshop/HomePage.dart';
 
 
 class Mocha extends StatefulWidget {
@@ -23,7 +24,16 @@ class _MochaState extends State<Mocha> {
             color: Colors.white70,
             onPressed: () {
               // Navigate back to the HomePage without animation
-
+              Navigator.pushReplacement(
+                context,
+                PageRouteBuilder(
+                  pageBuilder: (context, animation, secondaryAnimation) => HomePage(),
+                  transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                    return child;
+                  },
+                  maintainState: false,
+                ),
+              );
             },
           ),
         ),

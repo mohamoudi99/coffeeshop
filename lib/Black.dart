@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:coffeeshop/HomePage.dart';
 
 class Black extends StatefulWidget {
   Black({Key? key}) : super(key: key);
@@ -23,7 +23,16 @@ class _BlackState extends State<Black> {
             color: Colors.white70,
             onPressed: () {
               // Navigate back to the HomePage without animation
-
+              Navigator.pushReplacement(
+                context,
+                PageRouteBuilder(
+                  pageBuilder: (context, animation, secondaryAnimation) => HomePage(),
+                  transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                    return child;
+                  },
+                  maintainState: false,
+                ),
+              );
             },
           ),
         ),
