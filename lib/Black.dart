@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:coffeeshop/HomePage.dart';
-
+import 'package:coffeeshop/CartPage.dart';
+import 'Order.dart';
 class Black extends StatefulWidget {
   Black({Key? key}) : super(key: key);
 
@@ -9,9 +10,9 @@ class Black extends StatefulWidget {
     return _BlackState();
   }
 }
-
+int quantity = Order.cartItems[0].amount;
 class _BlackState extends State<Black> {
-  int quantity = 0; // Track the quantity
+
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +24,7 @@ class _BlackState extends State<Black> {
             color: Colors.white70,
             onPressed: () {
               // Navigate back to the HomePage without animation
+              quantity= Order.cartItems[0].amount;
               Navigator.pushReplacement(
                 context,
                 PageRouteBuilder(
@@ -61,7 +63,8 @@ class _BlackState extends State<Black> {
                     onPressed: () {
                       setState(() {
                         if (quantity > 0) {
-                          quantity -= 1;
+
+                          quantity--;
                         }
                       });
                     },
@@ -73,14 +76,15 @@ class _BlackState extends State<Black> {
                   ),
                   SizedBox(width: 8),
                   Text(
-                    '$quantity',
+                    '${quantity}',
                     style: TextStyle(fontSize: 18),
                   ),
                   SizedBox(width: 8),
                   ElevatedButton(
                     onPressed: () {
                       setState(() {
-                        quantity += 1;
+
+                        quantity++;
                       });
                     },
                     style: ElevatedButton.styleFrom(
@@ -94,7 +98,17 @@ class _BlackState extends State<Black> {
               ElevatedButton(
                 onPressed: () {
                   // Add to Cart logic here
-
+                  Order.cartItems[0].amount = quantity;
+                  Navigator.pushReplacement(
+                    context,
+                    PageRouteBuilder(
+                      pageBuilder: (context, animation, secondaryAnimation) => CartPage(),
+                      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                        return child;
+                      },
+                      maintainState: false,
+                    ),
+                  );
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.brown,
