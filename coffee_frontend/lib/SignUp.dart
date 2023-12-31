@@ -30,9 +30,17 @@ class _SignUpPageState extends State<SignUpPage> {
       };
       var response = await http.post(Uri.parse(signUp),
           headers: {"Content-Type": "application/json"},
-          body: jsonEncode(regBody));
+          body: jsonEncode(regBody)
+      );
 
-      print(response);
+      var jsonResponse = jsonDecode(response.body);
+
+      print(jsonResponse['message']);
+      if (jsonResponse['message'] == 'Signup successful') {
+        Navigator.push(context, MaterialPageRoute(builder: (context) => const Login()));
+      }else{
+        print("Something went wrong");
+      }
     } else {
       setState(() {
         _isNotValidate = true;
