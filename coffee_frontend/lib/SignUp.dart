@@ -1,5 +1,10 @@
+// ignore_for_file: library_private_types_in_public_api
+
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:coffee_frontend/Login.dart';
+import 'package:http/http.dart' as http;
+import 'config.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({Key? key}) : super(key: key);
@@ -12,7 +17,28 @@ class _SignUpPageState extends State<SignUpPage> {
   TextEditingController emailController = TextEditingController();
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-  final bool _isNotValidate = false;
+  bool _isNotValidate = false;
+
+  void registerUser() async {
+    if (emailController.text.isNotEmpty &&
+        usernameController.text.isNotEmpty &&
+        passwordController.text.isNotEmpty) {
+      var regBody = {
+        "email": emailController.text,
+        "username": usernameController.text,
+        "password": passwordController.text,
+      };
+      var response = await http.post(Uri.parse(signUp),
+          headers: {"Content-Type": "application/json"},
+          body: jsonEncode(regBody));
+
+      print(response);
+    } else {
+      setState(() {
+        _isNotValidate = true;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,11 +94,11 @@ class _SignUpPageState extends State<SignUpPage> {
               ),
             ),
             const SizedBox(height: 20.0),
-
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
+                  registerUser();
                   // Add your registration logic here
                 },
                 style: ElevatedButton.styleFrom(
@@ -87,7 +113,6 @@ class _SignUpPageState extends State<SignUpPage> {
                 ),
               ),
             ),
-
             const SizedBox(height: 13.0),
             TextButton(
               onPressed: () {

@@ -4,6 +4,7 @@ const User = require("../models/User");
 
 const signup = async (req, res) => {
   try {
+    console.log("hello" + req.body.username);
     const { email, username, password } = req.body;
     if (!email || !username || !password) {
       return res
