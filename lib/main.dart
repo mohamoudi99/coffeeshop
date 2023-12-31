@@ -1,3 +1,4 @@
+import 'package:coffeeshop/HomePage.dart';
 import 'package:flutter/material.dart';
 import 'FirstPage.dart';
 
@@ -12,7 +13,7 @@ class MyApp extends StatelessWidget{
   Widget build(BuildContext context){
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: FirstPage(),
+      home: HomePage(),
 
     );
   }
