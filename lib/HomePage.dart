@@ -107,31 +107,7 @@ class _HomePageState extends State<HomePage> {
       floatingActionButton: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          ElevatedButton.icon(
-            onPressed: () {
-              // Navigate to the Shop_page without animation
-              Navigator.pushReplacement(
-                context,
-                PageRouteBuilder(
-                  pageBuilder: (context, animation, secondaryAnimation) => Shop_page(),
-                  transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                    return child;
-                  },
-                  maintainState: false,
-                ),
-              );
-            },
-            icon: Icon(Icons.shopping_cart),
-            label: Text('Shop'),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.white70,
-              foregroundColor: Colors.black,
-              elevation: 5,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20.0),
-              ),
-            ),
-          ),
+
           SizedBox(width: 16.0), // Add spacing between buttons
           ElevatedButton.icon(
             onPressed: () {
@@ -150,6 +126,7 @@ class _HomePageState extends State<HomePage> {
             icon: Icon(Icons.shopping_basket),
             label: Text('Cart'),
             style: ElevatedButton.styleFrom(
+              minimumSize: Size(150,60),
               backgroundColor: Colors.white70,
               foregroundColor: Colors.black,
               elevation: 5,
@@ -206,12 +183,12 @@ class ListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(0.0), // Set the border radius
+        borderRadius: BorderRadius.circular(30.0), // Set the border radius
       ),
       child: Card(
         color: Colors.white70, // Change the background color here
         child: Container(
-          height: 100, // Adjust the height as needed
+          height: 90, // Adjust the height as needed
           child: ListTile(
             title: Text(itemName, style: TextStyle(color: Colors.black)), // Set text color
             subtitle: Text(subtitle, style: TextStyle(color: Colors.black)), // Set text color
@@ -231,7 +208,7 @@ class ListItem extends StatelessWidget {
                 _navigateToPage(context);
               },
               child: Padding(
-                padding: EdgeInsets.only(right: 20.0), // Adjust the right padding as needed
+                padding: EdgeInsets.only(right: 30.0), // Adjust the right padding as needed
                 child: Icon(Icons.arrow_forward), // Add the arrow icon here
               ),
             ),

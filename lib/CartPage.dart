@@ -1,6 +1,8 @@
+
+import 'package:coffeeshop/HomePage.dart';
 import 'package:flutter/material.dart';
 import 'Order.dart';
-import 'Order.dart'; // Import the Order.dart file
+
 
 class CartPage extends StatefulWidget {
   CartPage({Key? key}) : super(key: key);
@@ -21,7 +23,16 @@ class _CartPageState extends State<CartPage> {
           icon: Icon(Icons.arrow_back),
           onPressed: () {
             // Navigate back to the previous screen
-            Navigator.pop(context);
+            Navigator.pushReplacement(
+              context,
+              PageRouteBuilder(
+                pageBuilder: (context, animation, secondaryAnimation) => HomePage(),
+                transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                  return child;
+                },
+                maintainState: false,
+              ),
+            );
           },
         ),
         backgroundColor: Colors.white70,

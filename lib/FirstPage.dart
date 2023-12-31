@@ -1,5 +1,6 @@
+import 'package:coffeeshop/SignUp.dart';
 import 'package:flutter/material.dart';
-import 'package:coffeeshop/HomePage.dart';
+import 'package:coffeeshop/Login.dart';
 
 class FirstPage extends StatefulWidget {
   FirstPage({Key? key}) : super(key: key);
@@ -36,7 +37,7 @@ class _FirstPageState extends State<FirstPage> {
                 Navigator.pushReplacement(
                   context,
                   PageRouteBuilder(
-                    pageBuilder: (context, animation, secondaryAnimation) => HomePage(),
+                    pageBuilder: (context, animation, secondaryAnimation) => Login(),
                     transitionsBuilder: (context, animation, secondaryAnimation, child) {
                       return child;
                     },
@@ -45,14 +46,39 @@ class _FirstPageState extends State<FirstPage> {
                 );
               },
               style: ElevatedButton.styleFrom(
-                minimumSize: Size(400, 75),
+                minimumSize: Size(350, 60),
                 backgroundColor: Colors.brown,
                 foregroundColor: Colors.white70,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20.0),
                 ),
               ),
-              child: Text('Go To Shop'),
+              child: Text('Log In'),
+            ),
+            SizedBox(height: 15.0),
+            ElevatedButton(
+              onPressed: () {
+                // Navigate to the HomePage without the transition animation
+                Navigator.pushReplacement(
+                  context,
+                  PageRouteBuilder(
+                    pageBuilder: (context, animation, secondaryAnimation) => SignUpPage(),
+                    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                      return child;
+                    },
+                    maintainState: false, // Set this to false to avoid maintaining state
+                  ),
+                );
+              },
+              style: ElevatedButton.styleFrom(
+                minimumSize: Size(350, 60),
+                backgroundColor: Colors.brown,
+                foregroundColor: Colors.white70,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20.0),
+                ),
+              ),
+              child: Text('Sign Up'),
             ),
           ],
         ),
