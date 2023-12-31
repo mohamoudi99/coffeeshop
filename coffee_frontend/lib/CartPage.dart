@@ -55,7 +55,7 @@ class _CartPageState extends State<CartPage> {
                 child: Text('Cart is Empty', style: TextStyle(fontSize: 18, color: Colors.white)),
               )
                   : ListView.builder(
-                itemCount: Order.cartItems.length,
+                //itemCount: itemTiles.length,
                 itemBuilder: (context, index) {
                   return ListTile(
                     title: Row(

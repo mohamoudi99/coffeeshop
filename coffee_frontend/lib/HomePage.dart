@@ -1,8 +1,9 @@
-// ignore_for_file: library_private_types_in_public_api, unused_element
+// ignore_for_file: library_private_types_in_public_api, unused_element, deprecated_member_use, dead_code
 
 import 'package:coffee_frontend/Info.dart';
 import 'package:coffee_frontend/FirstPage.dart';
 import 'package:coffee_frontend/app_state.dart';
+import 'package:coffee_frontend/orderForm.dart';
 import 'package:flutter/material.dart';
 import 'package:coffee_frontend/CartPage.dart';
 import 'package:provider/provider.dart';
@@ -17,27 +18,157 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  bool showOrderForm = false;
+
   void _showCartModal(BuildContext context) {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
         AppState appState = Provider.of<AppState>(context);
-
         // Build your cart information here
         // You can use appState.totalItemCount and other information from the app state
-        return Column(
-          children: [
-            // Add your cart information widgets here
-            Text('Total Items: ${appState.totalItemCount}'),
-            // ...
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pop(context); // Close the modal
-              },
-              child: const Text('Close'),
+        //if items.totalAmount==0 then show empty cart
+        if (appState.totalItemCount == 0) {
+          return Container(
+            color: Colors.brown, // Set the background color to brown
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(
+                    Icons.shopping_cart,
+                    size: 100, // Adjust the size of the icon
+                    color: Colors.white,
+                  ),
+                  const SizedBox(height: 16),
+                  const Text(
+                    'Your cart is empty',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context); // Close the modal
+                    },
+                    style: ElevatedButton.styleFrom(
+                      primary:
+                          Colors.white70, // Set the background color to white
+                      onPrimary: Colors.black, // Set the text color to brown
+                    ),
+                    child: const Text('Close'),
+                  ),
+                ],
+              ),
             ),
-          ],
+          );
+        }
+
+        List<Widget> itemTiles = [];
+
+        for (var item in appState.items.entries) {
+          if (item.value.amount > 0) {
+            itemTiles.add(ListTile(
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(item.key, style: const TextStyle(color: Colors.white)),
+                  Text('\$${item.value.total}',
+                      style: const TextStyle(color: Colors.white))
+                ],
+              ),
+              subtitle: Text('Amount: ${item.value.amount}',
+                  style: const TextStyle(color: Colors.white)),
+            ));
+          }
+        }
+
+        return Container(
+          color: Colors.brown, // Set the background color to brown
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              children: [
+                // Use a ListView.builder for better performance
+                Expanded(
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: itemTiles.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return itemTiles[index];
+                    },
+                  ),
+                ),
+                Text(
+                  'Total Items: ${appState.totalItemCount}',
+                  style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  'Total Price: \$${appState.totalPrice.toStringAsFixed(2)}',
+                  style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
+                ),
+                const SizedBox(height: 16),
+                //if (showOrderForm) const OrderForm(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.pop(context); // Close the modal
+                      },
+                      style: ElevatedButton.styleFrom(
+                        primary:
+                            Colors.white70, // Set the background color to white
+                        onPrimary: Colors.black, // Set the text color to brown
+                      ),
+                      child: const Text('Close'),
+                    ),
+                    if (appState.totalItemCount > 0)
+                      ElevatedButton(
+                        onPressed: () {
+                          // Toggle the state to show/hide the order form
+                          Navigator.pop(context); // Close the modal
+                          _showOrderFormModal(context);
+                        },
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors
+                              .white70, // Set the background color to white
+                          onPrimary:
+                              Colors.black, // Set the text color to brown
+                        ),
+                        child: const Text('Order'),
+                      ),
+                  ],
+                ),
+              ],
+            ),
+          ),
         );
+      },
+    );
+  }
+
+  void _showOrderFormModal(BuildContext context) {
+    // Show the order form modal
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return OrderForm(onOrderSubmitted: () {
+          // Handle the order submission logic here
+          // Close the modal after order is submitted
+          Navigator.pop(context);
+        });
       },
     );
   }

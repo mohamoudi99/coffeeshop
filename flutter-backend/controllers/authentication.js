@@ -63,7 +63,7 @@ const login = async (req, res) => {
     }
     const payload = {
       id: authenticatingUser._id,
-      userName: authenticatingUser.userName,
+      username: authenticatingUser.username,
     };
     const secret = process.env.JWT_SECRET;
     const token = jwt.sign(payload, secret, { expiresIn: "1h" });
