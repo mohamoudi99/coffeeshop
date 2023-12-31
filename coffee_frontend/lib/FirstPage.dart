@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:coffee_frontend/Login.dart';
 
 class FirstPage extends StatefulWidget {
-  FirstPage({Key? key}) : super(key: key);
+  const FirstPage({Key? key}) : super(key: key);
 
   @override
   _FirstPageState createState() {
@@ -25,19 +25,19 @@ class _FirstPageState extends State<FirstPage> {
               width: 400,
               height: 400,
             ),
-            SizedBox(height: 20),
-            Text(
+            const SizedBox(height: 20),
+            const Text(
               'How  do you like your cofee?',
               style: TextStyle(fontSize: 18, color: Colors.black54,fontStyle: FontStyle.italic),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
                 // Navigate to the HomePage without the transition animation
                 Navigator.pushReplacement(
                   context,
                   PageRouteBuilder(
-                    pageBuilder: (context, animation, secondaryAnimation) => Login(),
+                    pageBuilder: (context, animation, secondaryAnimation) => const Login(),
                     transitionsBuilder: (context, animation, secondaryAnimation, child) {
                       return child;
                     },
@@ -46,23 +46,23 @@ class _FirstPageState extends State<FirstPage> {
                 );
               },
               style: ElevatedButton.styleFrom(
-                minimumSize: Size(350, 60),
+                minimumSize: const Size(350, 60),
                 backgroundColor: Colors.brown,
                 foregroundColor: Colors.white70,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20.0),
                 ),
               ),
-              child: Text('Log In'),
+              child: const Text('Log In'),
             ),
-            SizedBox(height: 15.0),
+            const SizedBox(height: 15.0),
             ElevatedButton(
               onPressed: () {
                 // Navigate to the HomePage without the transition animation
                 Navigator.pushReplacement(
                   context,
                   PageRouteBuilder(
-                    pageBuilder: (context, animation, secondaryAnimation) => SignUpPage(),
+                    pageBuilder: (context, animation, secondaryAnimation) => const SignUpPage(),
                     transitionsBuilder: (context, animation, secondaryAnimation, child) {
                       return child;
                     },
@@ -71,14 +71,14 @@ class _FirstPageState extends State<FirstPage> {
                 );
               },
               style: ElevatedButton.styleFrom(
-                minimumSize: Size(350, 60),
+                minimumSize: const Size(350, 60),
                 backgroundColor: Colors.brown,
                 foregroundColor: Colors.white70,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20.0),
                 ),
               ),
-              child: Text('Sign Up'),
+              child: const Text('Sign Up'),
             ),
           ],
         ),

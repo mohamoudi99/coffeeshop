@@ -1,10 +1,12 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 import 'package:coffee_frontend/HomePage.dart';
 import 'package:coffee_frontend/CartPage.dart';
 import 'Order.dart';
 
 class Black extends StatefulWidget {
-  Black({Key? key}) : super(key: key);
+  const Black({Key? key}) : super(key: key);
 
   @override
   _BlackState createState() {
@@ -21,7 +23,7 @@ class _BlackState extends State<Black> {
       appBar: AppBar(
         backgroundColor: Colors.brown,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           color: Colors.white70,
           onPressed: () {
             // Navigate back to the HomePage without animation
@@ -30,7 +32,7 @@ class _BlackState extends State<Black> {
               context,
               PageRouteBuilder(
                 pageBuilder: (context, animation, secondaryAnimation) =>
-                    HomePage(),
+                    const HomePage(),
                 transitionsBuilder:
                     (context, animation, secondaryAnimation, child) {
                   return child;
@@ -59,7 +61,7 @@ class _BlackState extends State<Black> {
               ),
             ),
           ),
-          SizedBox(height: 12), // Add spacing
+          const SizedBox(height: 12), // Add spacing
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -75,14 +77,14 @@ class _BlackState extends State<Black> {
                   backgroundColor: Colors.brown, // Set background color
                   foregroundColor: Colors.white70,
                 ),
-                child: Text('-'),
+                child: const Text('-'),
               ),
-              SizedBox(width: 8),
+              const SizedBox(width: 8),
               Text(
-                '${quantity}',
-                style: TextStyle(fontSize: 18),
+                '$quantity',
+                style: const TextStyle(fontSize: 18),
               ),
-              SizedBox(width: 8),
+              const SizedBox(width: 8),
               ElevatedButton(
                 onPressed: () {
                   setState(() {
@@ -92,11 +94,11 @@ class _BlackState extends State<Black> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.brown, // Set background color
                 ),
-                child: Text('+'),
+                child: const Text('+'),
               ),
             ],
           ),
-          SizedBox(height: 12), // Add spacing
+          const SizedBox(height: 12), // Add spacing
           ElevatedButton(
             onPressed: () {
               // Add to Cart logic here
@@ -105,7 +107,7 @@ class _BlackState extends State<Black> {
                 context,
                 PageRouteBuilder(
                   pageBuilder: (context, animation, secondaryAnimation) =>
-                      CartPage(),
+                      const CartPage(),
                   transitionsBuilder:
                       (context, animation, secondaryAnimation, child) {
                     return child;
@@ -118,7 +120,7 @@ class _BlackState extends State<Black> {
               backgroundColor: Colors.brown,
               foregroundColor: Colors.white70,
             ),
-            child: Text('Add to Cart'),
+            child: const Text('Add to Cart'),
           ),
         ],
       ),

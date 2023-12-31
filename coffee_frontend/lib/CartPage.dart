@@ -5,7 +5,7 @@ import 'Order.dart';
 
 
 class CartPage extends StatefulWidget {
-  CartPage({Key? key}) : super(key: key);
+  const CartPage({Key? key}) : super(key: key);
 
   @override
   _CartPageState createState() {
@@ -20,13 +20,13 @@ class _CartPageState extends State<CartPage> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             // Navigate back to the previous screen
             Navigator.pushReplacement(
               context,
               PageRouteBuilder(
-                pageBuilder: (context, animation, secondaryAnimation) => HomePage(),
+                pageBuilder: (context, animation, secondaryAnimation) => const HomePage(),
                 transitionsBuilder: (context, animation, secondaryAnimation, child) {
                   return child;
                 },
@@ -36,7 +36,7 @@ class _CartPageState extends State<CartPage> {
           },
         ),
         backgroundColor: Colors.white70,
-        title: Text('Cart Page'), // Set the title to 'Cart Page' or any relevant text
+        title: const Text('Cart Page'), // Set the title to 'Cart Page' or any relevant text
       ),
       backgroundColor: Colors.brown,
       body: Padding(
@@ -44,14 +44,14 @@ class _CartPageState extends State<CartPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
+            const Text(
               'Cart Items',
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Expanded(
               child: isCartEmpty
-                  ? Center(
+                  ? const Center(
                 child: Text('Cart is Empty', style: TextStyle(fontSize: 18, color: Colors.white)),
               )
                   : ListView.builder(
@@ -61,20 +61,20 @@ class _CartPageState extends State<CartPage> {
                     title: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children:[
-                        Text(Order.cartItems[index].name, style: TextStyle(color: Colors.white)),
-                        Text('\$${Order.cartItems[index].totalPrice()}' , style: TextStyle(color: Colors.white))
+                        Text(Order.cartItems[index].name, style: const TextStyle(color: Colors.white)),
+                        Text('\$${Order.cartItems[index].totalPrice()}' , style: const TextStyle(color: Colors.white))
                         ]
                     ),
-                    subtitle: Text('Amount: ${Order.cartItems[index].amount}', style: TextStyle(color: Colors.white)),
+                    subtitle: Text('Amount: ${Order.cartItems[index].amount}', style: const TextStyle(color: Colors.white)),
                   );
 
                 },
               ),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Text(
               'Total Price: \$${calculateTotalPrice()}',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
             ),
           ],
         ),

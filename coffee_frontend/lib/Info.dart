@@ -2,20 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:coffee_frontend/HomePage.dart';
 
 class Info extends StatelessWidget {
-  Info({Key? key}) : super(key: key);
+  const Info({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             // Navigate back to the HomePage without animation
             Navigator.pushReplacement(
               context,
               PageRouteBuilder(
-                pageBuilder: (context, animation, secondaryAnimation) => HomePage(),
+                pageBuilder: (context, animation, secondaryAnimation) => const HomePage(),
                 transitionsBuilder: (context, animation, secondaryAnimation, child) {
                   return child;
                 },
@@ -27,12 +27,12 @@ class Info extends StatelessWidget {
 
         ),
         backgroundColor: Colors.white70,
-        title: Text('Info'), // Set the title to 'Info' or any relevant text
+        title: const Text('Info'), // Set the title to 'Info' or any relevant text
         foregroundColor: Colors.black,
       ),
-      body: Center(
+      body: const Center(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: EdgeInsets.all(16.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

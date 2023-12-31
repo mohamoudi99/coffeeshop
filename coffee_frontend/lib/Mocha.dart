@@ -4,7 +4,7 @@ import 'package:coffee_frontend/HomePage.dart';
 import 'CartPage.dart';
 import 'Order.dart';
 class Mocha extends StatefulWidget {
-  Mocha({Key? key}) : super(key: key);
+  const Mocha({Key? key}) : super(key: key);
 
   @override
   _MochaState createState() {
@@ -20,7 +20,7 @@ class _MochaState extends State<Mocha> {
         appBar: AppBar(
           backgroundColor: Colors.brown,
           leading: IconButton(
-            icon: Icon(Icons.arrow_back),
+            icon: const Icon(Icons.arrow_back),
             color: Colors.white70,
             onPressed: () {
               // Navigate back to the HomePage without animation
@@ -28,7 +28,7 @@ class _MochaState extends State<Mocha> {
               Navigator.pushReplacement(
                 context,
                 PageRouteBuilder(
-                  pageBuilder: (context, animation, secondaryAnimation) => HomePage(),
+                  pageBuilder: (context, animation, secondaryAnimation) => const HomePage(),
                   transitionsBuilder: (context, animation, secondaryAnimation, child) {
                     return child;
                   },
@@ -55,7 +55,7 @@ class _MochaState extends State<Mocha> {
                   ),
                 ),
               ),
-              SizedBox(height: 12), // Add spacing
+              const SizedBox(height: 12), // Add spacing
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -71,14 +71,14 @@ class _MochaState extends State<Mocha> {
                         backgroundColor: Colors.brown,
                         foregroundColor: Colors.white70// Set background color
                     ),
-                    child: Text('-'),
+                    child: const Text('-'),
                   ),
-                  SizedBox(width: 8),
+                  const SizedBox(width: 8),
                   Text(
-                    '${quantity}',
-                    style: TextStyle(fontSize: 18),
+                    '$quantity',
+                    style: const TextStyle(fontSize: 18),
                   ),
-                  SizedBox(width: 8),
+                  const SizedBox(width: 8),
                   ElevatedButton(
                     onPressed: () {
                       setState(() {
@@ -88,11 +88,11 @@ class _MochaState extends State<Mocha> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.brown, // Set background color
                     ),
-                    child: Text('+'),
+                    child: const Text('+'),
                   ),
                 ],
               ),
-              SizedBox(height: 12), // Add spacing
+              const SizedBox(height: 12), // Add spacing
               ElevatedButton(
                 onPressed: () {
                   // Add to Cart logic here
@@ -100,7 +100,7 @@ class _MochaState extends State<Mocha> {
                   Navigator.pushReplacement(
                     context,
                     PageRouteBuilder(
-                      pageBuilder: (context, animation, secondaryAnimation) => CartPage(),
+                      pageBuilder: (context, animation, secondaryAnimation) => const CartPage(),
                       transitionsBuilder: (context, animation, secondaryAnimation, child) {
                         return child;
                       },
@@ -113,7 +113,7 @@ class _MochaState extends State<Mocha> {
                   foregroundColor: Colors.white70,
                   // Set background color
                 ),
-                child: Text('Add to Cart'),
+                child: const Text('Add to Cart'),
               ),
             ],
            ),

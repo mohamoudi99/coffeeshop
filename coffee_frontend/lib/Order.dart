@@ -21,7 +21,7 @@ class CartItem {
   });
 
   double totalPrice() {
-    return this.amount*this.price;
+    return amount*price;
   }
 
   }
