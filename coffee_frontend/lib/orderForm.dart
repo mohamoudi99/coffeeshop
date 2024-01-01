@@ -1,20 +1,20 @@
-// ignore_for_file: deprecated_member_use
+// ignore_for_file: must_be_immutable, library_private_types_in_public_api, deprecated_member_use
 
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
 
 class OrderForm extends StatefulWidget {
-  final VoidCallback onOrderSubmitted;
+  final Function(String name, String address, String floor) onOrderSubmitted;
+  bool _isNotValidate = false;
 
-  const OrderForm({Key? key, required this.onOrderSubmitted}) : super(key: key);
+  OrderForm({Key? key, required this.onOrderSubmitted}) : super(key: key);
 
   @override
   _OrderFormState createState() => _OrderFormState();
 }
 
 class _OrderFormState extends State<OrderForm> {
-  final TextEditingController nameController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
   final TextEditingController addressController = TextEditingController();
   final TextEditingController floorController = TextEditingController();
 
@@ -45,8 +45,8 @@ class _OrderFormState extends State<OrderForm> {
                 ),
                 const SizedBox(height: 16),
                 _buildInputField(
-                  label: 'Name',
-                  controller: nameController,
+                  label: 'phone number',
+                  controller: phoneController,
                   //make the primary color as white
                 ),
                 const SizedBox(height: 16),
@@ -67,10 +67,30 @@ class _OrderFormState extends State<OrderForm> {
                     onPrimary: Colors.black, // Set the text color to brown
                   ),
                   onPressed: () {
-                    // Call the callback when the order is submitted
-                    widget.onOrderSubmitted();
+                    // Check the validation condition here
+                    if (validateForm()) {
+                      // Call the callback when the order is submitted
+                      widget.onOrderSubmitted(
+                        phoneController.text,
+                        addressController.text,
+                        floorController.text,
+                      );
+                    } else {
+                      // Set the not valid state
+                      setState(() {
+                        widget._isNotValidate = true;
+                      });
+                    }
                   },
-                  child: const Text('Submit Order'),
+                  child: Text(
+                    'Submit Order',
+                    style: TextStyle(
+                      color: widget._isNotValidate
+                          ? Colors
+                              .red // Change text color to red when not valid
+                          : Colors.black, // Set the text color to brown
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -98,18 +118,30 @@ class _OrderFormState extends State<OrderForm> {
         ),
         enabledBorder: OutlineInputBorder(
           borderSide: BorderSide(
-              color: Colors.black
-                  .withOpacity(0.5)), // Set border color when not focused
+              color: widget._isNotValidate
+                  ? Colors.red // Change border color to red when not valid
+                  : Colors.black
+                      .withOpacity(0.5)), // Set border color when not focused
           borderRadius: BorderRadius.circular(10.0),
         ),
       ),
     );
   }
 
+  bool validateForm() {
+    // Implement your validation logic here
+    // For example, you can check if the required fields are not empty
+    return phoneController.text.isNotEmpty &&
+            addressController.text.isNotEmpty &&
+            floorController.text.isNotEmpty
+        //also check if the phone number is 10 digits and a number
+        ;
+  }
+
   @override
   void dispose() {
     // Dispose controllers when the widget is disposed
-    nameController.dispose();
+    phoneController.dispose();
     addressController.dispose();
     floorController.dispose();
     super.dispose();

@@ -26,4 +26,12 @@ class AppState extends ChangeNotifier {
     items[itemName]!.total += items[itemName]!.price;
     notifyListeners();
   }
+
+  void removeFromCart(String itemName) {
+    totalItemCount--;
+    totalPrice -= items[itemName]!.price;
+    items[itemName]!.amount--;
+    items[itemName]!.total -= items[itemName]!.price;
+    notifyListeners();
+  }
 }

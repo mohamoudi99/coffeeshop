@@ -14,6 +14,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 //routes
 app.use("/api/v1/auth", require("./routes/authentication"));
+app.use("/api/v1/", require("./routes/order"));
+app.use("/api/v1/", require("./routes/products"));
 //error handlers
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
