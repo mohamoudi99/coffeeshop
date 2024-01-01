@@ -1,5 +1,6 @@
 // ignore_for_file: sort_child_properties_last
 
+import 'package:coffee_frontend/FirstPage.dart';
 import 'package:coffee_frontend/HomePage.dart';
 import 'package:coffee_frontend/Login.dart';
 import 'package:coffee_frontend/SignUp.dart';
@@ -39,7 +40,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         home: JwtDecoder.isExpired(token!)
-            ? const SignUpPage()
+            ? const FirstPage()
             : HomePage(token: token),
       ),
     );
