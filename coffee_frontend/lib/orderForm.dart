@@ -1,7 +1,9 @@
 // ignore_for_file: must_be_immutable, library_private_types_in_public_api, deprecated_member_use
 
 import 'dart:ui';
+import 'package:coffee_frontend/app_state.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class OrderForm extends StatefulWidget {
   final Function(String name, String address, String floor) onOrderSubmitted;
@@ -75,6 +77,7 @@ class _OrderFormState extends State<OrderForm> {
                         addressController.text,
                         floorController.text,
                       );
+                      Provider.of<AppState>(context, listen: false).reset();
                     } else {
                       // Set the not valid state
                       setState(() {
