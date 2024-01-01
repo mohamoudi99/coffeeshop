@@ -30,8 +30,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     if (token == null) {
       // Handle the case where the token is null, e.g., redirect to login screen.
-      return const MaterialApp(
-        home: FirstPage(), // Replace LoginPage with your login screen.
+      return ChangeNotifierProvider(
+        create: (context) => AppState(),
+        child: const MaterialApp(
+          debugShowCheckedModeBanner: false,
+          home: FirstPage(),
+        ),
       );
     }
 
