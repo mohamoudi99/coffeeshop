@@ -25,9 +25,10 @@ const addOrder = async (req, res) => {
     products.forEach((element) => {
       totalPrice += element.total;
     });
+    console.log("user" + req.user.id);
     console.log(productsOrdered);
     const order = new Order({
-      user: req.body._id,
+      user: req.user.id,
       products: productsToFillDb,
       totalPrice,
       address,

@@ -1,12 +1,13 @@
+// ignore_for_file: use_build_context_synchronously, avoid_print
+
 import 'dart:convert';
+import 'package:coffee_frontend/HomePage.dart';
 import 'package:coffee_frontend/dashboard.dart';
 import 'package:flutter/material.dart';
 import 'config.dart';
 import 'package:coffee_frontend/SignUp.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-
-
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -15,7 +16,6 @@ class Login extends StatefulWidget {
   _LoginState createState() => _LoginState();
 }
 
-
 class _LoginState extends State<Login> {
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -23,46 +23,40 @@ class _LoginState extends State<Login> {
   late SharedPreferences prefs;
 
   @override
-  void initState(){
-
+  void initState() {
     super.initState();
     initSharedPref();
   }
 
-  void initSharedPref() async{
+  void initSharedPref() async {
     prefs = await SharedPreferences.getInstance();
-
   }
 
   void loginUser() async {
-    if (
-        usernameController.text.isNotEmpty &&
+    if (usernameController.text.isNotEmpty &&
         passwordController.text.isNotEmpty) {
       var regBody = {
-
         "username": usernameController.text,
         "password": passwordController.text,
       };
       var response = await http.post(Uri.parse(LOgin),
           headers: {"Content-Type": "application/json"},
-          body: jsonEncode(regBody)
-      );
+          body: jsonEncode(regBody));
 
       var jsonResponse = jsonDecode(response.body);
 
-      print(jsonResponse['message']);
-      if (jsonResponse['message'] == 'Signup successful') {
+      print(jsonResponse['token']);
+      if (response.statusCode == 200) {
         var myToken = jsonResponse['token'];
-        prefs.setString('token',myToken);
-        Navigator.push(context, MaterialPageRoute(builder: (context) => Dashboard(token: myToken)));
-
-
-      }else{
+        prefs.setString('token', myToken);
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => HomePage(token: myToken)));
+      } else {
         print("Something went wrong");
       }
-
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -107,14 +101,16 @@ class _LoginState extends State<Login> {
             ),
             const SizedBox(height: 20.0),
             SizedBox(
-              width: double.infinity, // Set the button width to the maximum available width
+              width: double
+                  .infinity, // Set the button width to the maximum available width
               child: ElevatedButton(
                 onPressed: () {
                   loginUser();
                   // Add your login logic here
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.brown, // Set the background color to brown
+                  backgroundColor:
+                      Colors.brown, // Set the background color to brown
                 ),
                 child: const Text(
                   'Login',
@@ -128,20 +124,19 @@ class _LoginState extends State<Login> {
             const SizedBox(height: 12.0),
             TextButton(
               onPressed: () {
-
                 // Add navigation logic to go to the sign-up page
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => const SignUpPage()),
                 );
               },
-              child: const Text("Don't have an account? Sign Up",
+              child: const Text(
+                "Don't have an account? Sign Up",
                 style: TextStyle(
-                color: Colors.black, // Set the text color to black
-                fontSize: 16.0,
+                  color: Colors.black, // Set the text color to black
+                  fontSize: 16.0,
+                ),
               ),
-            ),
-
             ),
           ],
         ),
@@ -149,8 +144,3 @@ class _LoginState extends State<Login> {
     );
   }
 }
-
-
-
-
-

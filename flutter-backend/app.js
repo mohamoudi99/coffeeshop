@@ -7,15 +7,18 @@ const notFoundMiddleware = require("./middleware/not-found");
 const errorHandlerMiddleware = require("./middleware/errorHandler");
 const cors = require("cors");
 const connectDB = require("./db/connect");
-
+const authenticateJWT = require("./middleware/authenticateJWT");
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 //routes
 app.use("/api/v1/auth", require("./routes/authentication"));
-app.use("/api/v1/", require("./routes/order"));
 app.use("/api/v1/", require("./routes/products"));
+app.use("/api/v1/", authenticateJWT);
+//protcted routes
+app.use("/api/v1/", require("./routes/order"));
+
 //error handlers
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
