@@ -1,12 +1,15 @@
-// ignore_for_file: library_private_types_in_public_api, unused_element, deprecated_member_use, dead_code
+// ignore_for_file: library_private_types_in_public_api, unused_element, deprecated_member_use, dead_code, use_build_context_synchronously
+
+import 'dart:convert';
 
 import 'package:coffee_frontend/Info.dart';
 import 'package:coffee_frontend/FirstPage.dart';
 import 'package:coffee_frontend/app_state.dart';
 import 'package:coffee_frontend/orderForm.dart';
 import 'package:flutter/material.dart';
-import 'package:coffee_frontend/CartPage.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
+import 'package:coffee_frontend/CoffeeItem.dart' as coffeeItem;
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -19,6 +22,45 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   bool showOrderForm = false;
+
+  List<coffeeItem.CoffeeItem> coffeeItems = [];
+  @override
+  void initState() {
+    super.initState();
+    // Fetch coffee items when the widget is initialized
+    _fetchCoffeeItems();
+  }
+
+  Future<void> _fetchCoffeeItems() async {
+    try {
+      final response =
+          await http.get(Uri.parse('http://localhost:3000/api/v1/products'));
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> responseData = jsonDecode(response.body);
+
+        if (responseData.containsKey('products')) {
+          final List<dynamic> productList = responseData['products'];
+
+          final List<coffeeItem.CoffeeItem> items = productList
+              .map((item) => coffeeItem.CoffeeItem.fromJson(item))
+              .toList();
+
+          setState(() {
+            coffeeItems = items;
+          });
+        } else {
+          print('Response does not contain the expected "products" key');
+        }
+      } else {
+        // Handle error
+        print('Failed to fetch coffee items: ${response.statusCode}');
+      }
+    } catch (e) {
+      // Handle other exceptions
+      print('Error during coffee items fetch: $e');
+    }
+  }
 
   void _showCartModal(BuildContext context) {
     showModalBottomSheet(
@@ -164,10 +206,56 @@ class _HomePageState extends State<HomePage> {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
-        return OrderForm(onOrderSubmitted: () {
-          // Handle the order submission logic here
-          // Close the modal after order is submitted
-          Navigator.pop(context);
+        AppState appState = Provider.of<AppState>(context);
+
+        return OrderForm(onOrderSubmitted: (phone, address, floor) {
+          void registerUser() async {
+            print(phone);
+            if (phone.isNotEmpty && address.isNotEmpty && floor.isNotEmpty) {
+              var orderBody = {
+                "_id": "65917bf7b5656d6de96a7070",
+                "phone": phone,
+                "address": address,
+                "floor": floor,
+                //add items that have amount>0
+                "products": appState.items.entries
+                    .where((element) => element.value.amount > 0)
+                    .map((e) => {
+                          "name": e.key,
+                          "amount": e.value.amount,
+                          "total": e.value.total
+                        })
+                    .toList()
+              };
+              var response = await http.post(
+                  Uri.parse('http://localhost:3000/api/v1/orders'),
+                  headers: {"Content-Type": "application/json"},
+                  body: jsonEncode(orderBody));
+
+              if (response.statusCode == 200) {
+                //show success message
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Order Placed Successfully'),
+                  ),
+                );
+                Navigator.pop(context);
+              } else {
+                //show error message
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Order Failed'),
+                  ),
+                );
+              }
+            } else {
+              setState(() {
+                showOrderForm = true;
+              });
+            }
+          }
+
+          registerUser();
         });
       },
     );
@@ -239,29 +327,14 @@ class _HomePageState extends State<HomePage> {
       body: Padding(
         padding: const EdgeInsets.all(15.0),
         child: ListView(
-          children: const [
-            ListItem(
-              itemName: 'Black',
-              subtitle: '3.5USD',
-              imagePath: 'lib/images/black.jpeg',
-            ),
-            ListItem(
-              itemName: 'Caramel',
-              subtitle: '4USD',
-              imagePath: 'lib/images/caramel.jpeg',
-            ),
-            ListItem(
-              itemName: 'Mocha',
-              subtitle: '4USD',
-              imagePath: 'lib/images/mocha.jpeg',
-            ),
-            ListItem(
-              itemName: 'Vanilla',
-              subtitle: '4USD',
-              imagePath: 'lib/images/vanilla.jpeg',
-            ),
-            // Add more items as needed
-          ],
+          children: coffeeItems
+              .map((item) => ListItem(
+                    itemName: item.name,
+                    subtitle: item.subtitle,
+                    imagePath: item.imagePath,
+                    price: item.price.toString(),
+                  ))
+              .toList(),
         ),
       ),
       floatingActionButton: Row(
@@ -295,12 +368,14 @@ class ListItem extends StatefulWidget {
   final String itemName;
   final String imagePath;
   final String subtitle;
+  final String price;
 
   const ListItem({
     Key? key,
     required this.itemName,
     required this.imagePath,
     required this.subtitle,
+    required this.price,
   }) : super(key: key);
 
   @override
@@ -321,13 +396,14 @@ class _ListItemState extends State<ListItem> {
     setState(() {
       if (itemCount > 0) {
         itemCount--;
+        Provider.of<AppState>(context, listen: false)
+            .removeFromCart(widget.itemName);
       }
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    AppState appState = Provider.of<AppState>(context);
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(30.0),
@@ -341,9 +417,18 @@ class _ListItemState extends State<ListItem> {
               widget.itemName,
               style: const TextStyle(color: Colors.black),
             ),
-            subtitle: Text(
-              widget.subtitle,
-              style: const TextStyle(color: Colors.black),
+            subtitle: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  widget.subtitle,
+                  style: const TextStyle(color: Colors.black),
+                ),
+                Text(
+                  '${widget.price} \$',
+                  style: const TextStyle(color: Colors.black),
+                ),
+              ],
             ),
             contentPadding: const EdgeInsets.all(9.0),
             leading: Container(
