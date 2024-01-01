@@ -1,10 +1,12 @@
 import 'dart:convert';
-
+import 'package:coffee_frontend/dashboard.dart';
 import 'package:flutter/material.dart';
+import 'config.dart';
 import 'package:coffee_frontend/SignUp.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'config.dart';
+
+
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -12,6 +14,7 @@ class Login extends StatefulWidget {
   @override
   _LoginState createState() => _LoginState();
 }
+
 
 class _LoginState extends State<Login> {
   TextEditingController usernameController = TextEditingController();
@@ -21,7 +24,7 @@ class _LoginState extends State<Login> {
 
   @override
   void initState(){
-    //TODO: implement initState
+
     super.initState();
     initSharedPref();
   }
@@ -40,7 +43,7 @@ class _LoginState extends State<Login> {
         "username": usernameController.text,
         "password": passwordController.text,
       };
-      var response = await http.post(Uri.parse(signUp),
+      var response = await http.post(Uri.parse(LOgin),
           headers: {"Content-Type": "application/json"},
           body: jsonEncode(regBody)
       );
@@ -49,8 +52,10 @@ class _LoginState extends State<Login> {
 
       print(jsonResponse['message']);
       if (jsonResponse['message'] == 'Signup successful') {
+        var myToken = jsonResponse['token'];
+        prefs.setString('token',myToken);
+        Navigator.push(context, MaterialPageRoute(builder: (context) => Dashboard(token: myToken)));
 
-        print("Token received: ${jsonResponse['token']}");
 
       }else{
         print("Something went wrong");

@@ -6,6 +6,8 @@ import 'package:coffee_frontend/Login.dart';
 import 'package:http/http.dart' as http;
 import 'config.dart';
 
+
+
 class SignUpPage extends StatefulWidget {
   const SignUpPage({Key? key}) : super(key: key);
 
