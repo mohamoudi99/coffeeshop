@@ -1,4 +1,4 @@
-// ignore_for_file: library_private_types_in_public_api, unused_element, deprecated_member_use, dead_code, use_build_context_synchronously
+// ignore_for_file: library_private_types_in_public_api, unused_element, deprecated_member_use, dead_code, use_build_context_synchronously, no_leading_underscores_for_local_identifiers
 
 import 'dart:convert';
 
@@ -397,28 +397,24 @@ class ListItem extends StatefulWidget {
 }
 
 class _ListItemState extends State<ListItem> {
-  int itemCount = 0;
-
-  void _increaseAmount() {
-    setState(() {
-      itemCount++;
-      Provider.of<AppState>(context, listen: false).updateCart(widget.itemName);
-    });
-  }
-
-  void _decreaseAmount() {
-    setState(() {
-      if (itemCount > 0) {
-        itemCount--;
-        Provider.of<AppState>(context, listen: false)
-            .removeFromCart(widget.itemName);
-      }
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     AppState appState = Provider.of<AppState>(context);
+    void _increaseAmount() {
+      setState(() {
+        Provider.of<AppState>(context, listen: false)
+            .updateCart(widget.itemName);
+      });
+    }
+
+    void _decreaseAmount() {
+      setState(() {
+        if (appState.items[widget.itemName]!.amount > 0) {
+          Provider.of<AppState>(context, listen: false)
+              .removeFromCart(widget.itemName);
+        }
+      });
+    }
 
     return Container(
       decoration: BoxDecoration(
