@@ -4,6 +4,7 @@ import 'dart:convert';
 
 import 'package:coffee_frontend/Info.dart';
 import 'package:coffee_frontend/FirstPage.dart';
+import 'package:coffee_frontend/Login.dart';
 import 'package:coffee_frontend/app_state.dart';
 import 'package:coffee_frontend/orderForm.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +13,9 @@ import 'package:http/http.dart' as http;
 import 'package:coffee_frontend/CoffeeItem.dart' as coffeeItem;
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  final token;
+
+  const HomePage({@required this.token, Key? key}) : super(key: key);
 
   @override
   _HomePageState createState() {
@@ -21,12 +24,20 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  late String email;
+
   bool showOrderForm = false;
 
   List<coffeeItem.CoffeeItem> coffeeItems = [];
   @override
   void initState() {
     super.initState();
+    if (widget.token == null) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const Login()),
+      );
+    }
     // Fetch coffee items when the widget is initialized
     _fetchCoffeeItems();
   }
@@ -209,8 +220,8 @@ class _HomePageState extends State<HomePage> {
         AppState appState = Provider.of<AppState>(context);
 
         return OrderForm(onOrderSubmitted: (phone, address, floor) {
-          void registerUser() async {
-            print(phone);
+          void order() async {
+            print(widget.token);
             if (phone.isNotEmpty && address.isNotEmpty && floor.isNotEmpty) {
               var orderBody = {
                 "_id": "65917bf7b5656d6de96a7070",
@@ -229,7 +240,10 @@ class _HomePageState extends State<HomePage> {
               };
               var response = await http.post(
                   Uri.parse('http://localhost:3000/api/v1/orders'),
-                  headers: {"Content-Type": "application/json"},
+                  headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer ${widget.token}"
+                  },
                   body: jsonEncode(orderBody));
 
               if (response.statusCode == 200) {
@@ -255,7 +269,7 @@ class _HomePageState extends State<HomePage> {
             }
           }
 
-          registerUser();
+          order();
         });
       },
     );
@@ -404,6 +418,8 @@ class _ListItemState extends State<ListItem> {
 
   @override
   Widget build(BuildContext context) {
+    AppState appState = Provider.of<AppState>(context);
+
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(30.0),
@@ -452,7 +468,7 @@ class _ListItemState extends State<ListItem> {
                   ),
                 ),
                 Text(
-                  '$itemCount',
+                  '${appState.items[widget.itemName]!.amount}',
                   style: const TextStyle(fontSize: 18),
                 ),
                 GestureDetector(
