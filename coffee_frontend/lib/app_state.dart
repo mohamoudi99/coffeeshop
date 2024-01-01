@@ -34,4 +34,14 @@ class AppState extends ChangeNotifier {
     items[itemName]!.total -= items[itemName]!.price;
     notifyListeners();
   }
+
+  void reset() {
+    totalItemCount = 0;
+    totalPrice = 0.0;
+    items.forEach((key, value) {
+      value.amount = 0;
+      value.total = 0.0;
+    });
+    notifyListeners();
+  }
 }
